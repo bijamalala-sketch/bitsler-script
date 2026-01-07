@@ -1,6 +1,90 @@
-<h1>✅ Paiement confirmé</h1>
-<a id="dl">Télécharger</a>
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<title>Paiement confirmé</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+<style>
+body {
+    font-family: 'Inter', sans-serif;
+    background: linear-gradient(135deg, #f5f5f5, #e0e7ff);
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+
+.container {
+    background: #fff;
+    padding: 35px 40px;
+    border-radius: 15px;
+    box-shadow: 0 12px 25px rgba(0,0,0,0.2);
+    max-width: 450px;
+    width: 100%;
+    text-align: center;
+}
+
+h1 {
+    color: #16a34a;
+    font-weight: 700;
+    margin-bottom: 15px;
+}
+
+p {
+    color: #555;
+    margin: 10px 0;
+}
+
+a#dl {
+    display: inline-block;
+    padding: 15px 25px;
+    margin-top: 25px;
+    background: #2563eb;
+    color: #fff;
+    font-weight: 600;
+    font-size: 16px;
+    text-decoration: none;
+    border-radius: 12px;
+    transition: 0.3s all;
+}
+
+a#dl:hover {
+    background: #1e40af;
+    transform: translateY(-2px);
+}
+
+footer {
+    margin-top: 20px;
+    font-size: 12px;
+    color: #888;
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+    <h1>✅ Paiement confirmé !</h1>
+    <p>Merci pour votre achat.</p>
+    <p>Email : <b id="email"></b></p>
+    <p>Commande : <b id="orderId"></b></p>
+
+    <a id="dl" href="#">Télécharger votre fichier</a>
+
+    <footer>Le lien est unique et sécurisé pour votre appareil.</footer>
+</div>
+
 <script>
-const t=new URLSearchParams(location.search).get("token");
-document.getElementById("dl").href="download.html?token="+t;
+// Récupérer les paramètres
+const params = new URLSearchParams(location.search);
+const token = params.get("token");
+const orderData = JSON.parse(localStorage.getItem("order_"+token) || "{}");
+document.getElementById("email").innerText = orderData.email || "Inconnu";
+document.getElementById("orderId").innerText = orderData.orderId || "Inconnu";
+
+// Générer le lien unique
+document.getElementById("dl").href = "download.html?token=" + token;
 </script>
+
+</body>
+</html>
