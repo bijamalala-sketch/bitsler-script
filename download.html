@@ -1,9 +1,88 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<title>Téléchargement</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+<style>
+body {
+    font-family: 'Inter', sans-serif;
+    background: linear-gradient(135deg, #f5f5f5, #e0e7ff);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+}
+
+.container {
+    background: #fff;
+    padding: 35px 40px;
+    border-radius: 15px;
+    box-shadow: 0 12px 25px rgba(0,0,0,0.2);
+    max-width: 450px;
+    width: 100%;
+    text-align: center;
+}
+
+h1 {
+    font-weight: 700;
+    color: #2563eb;
+    margin-bottom: 15px;
+}
+
+p {
+    color: #555;
+    margin: 12px 0;
+}
+
+a#file {
+    display: inline-block;
+    padding: 15px 25px;
+    margin-top: 20px;
+    background: #16a34a;
+    color: #fff;
+    font-weight: 600;
+    font-size: 16px;
+    text-decoration: none;
+    border-radius: 12px;
+    transition: 0.3s all;
+}
+
+a#file:hover {
+    background: #15803d;
+    transform: translateY(-2px);
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Téléchargement</h1>
+    <p id="message">Préparation de votre fichier…</p>
+    <a id="file" href="#" style="display:none;">Télécharger maintenant</a>
+</div>
+
 <script>
-const t=new URLSearchParams(location.search).get("token");
-const d=JSON.parse(localStorage.getItem("dl_"+t));
-if(!d||d.used||Date.now()>d.exp){document.body.innerText="Lien invalide";throw"";}
-if(d.fp!==navigator.userAgent){document.body.innerText="Appareil non autorisé";throw"";}
-d.used=true;
-localStorage.setItem("dl_"+t,JSON.stringify(d));
-location.href="fichier.txt";
+const params = new URLSearchParams(location.search);
+const token = params.get("token");
+const data = JSON.parse(localStorage.getItem("dl_"+token) || "{}");
+
+if(!data){
+    document.getElementById("message").innerText = "Lien invalide ou expiré.";
+}else if(data.used || Date.now() > data.exp){
+    document.getElementById("message").innerText = "Ce lien a expiré ou a déjà été utilisé.";
+}else if(data.fp !== navigator.userAgent){
+    document.getElementById("message").innerText = "Ce lien ne peut pas être utilisé sur cet appareil.";
+}else{
+    // Tout est ok
+    document.getElementById("file").style.display="inline-block";
+    document.getElementById("file").href="fichier.txt";
+    document.getElementById("message").innerText="Votre fichier est prêt à être téléchargé !";
+    data.used = true;
+    localStorage.setItem("dl_"+token, JSON.stringify(data));
+}
 </script>
+
+</body>
+</html>
