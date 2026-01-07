@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<title>Paiement</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<h1 id="cryptoName"></h1>
+<p>Commande : <b id="orderId"></b></p>
+<p>Email : <b id="email"></b></p>
+
+<h2 id="amount"></h2>
+<img id="qr" width="200">
+
+<div class="wallet" id="address"></div>
+<button onclick="copyAddress()">📋 Copier</button>
+
+<p id="network" class="warning"></p>
+<p>⏳ Temps restant : <span id="timer">15:00</span></p>
+
+<script src="script.js"></script>
+</body>
+</html>
