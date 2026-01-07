@@ -1,21 +1,32 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8">
-  <title>Produit digital</title>
+<meta charset="UTF-8">
+<title>Paiement crypto</title>
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-  <h1>Fichier texte premium (.txt)</h1>
+<h1>Payer en cryptomonnaie</h1>
 
-  <p>
-    Ce fichier contient un contenu exclusif.<br>
-    Livraison immédiate après paiement en cryptomonnaie.
-  </p>
- 
-  <h2>Prix : 10 USDT</h2>
+<div class="crypto-grid">
+  <button onclick="goPay('BTC')">BTC</button>
+  <button onclick="goPay('ETH')">ETH</button>
+  <button onclick="goPay('LTC')">LTC</button>
+  <button onclick="goPay('DOGE')">DOGE</button>
+  <button onclick="goPay('USDT_TRON')">USDT TRC20</button>
+  <button onclick="goPay('USDT_BEP20')">USDT BEP20</button>
+</div>
 
-  <button>Payer en cryptomonnaie</button>
+<input id="email" placeholder="Email" type="email">
+
+<script>
+function goPay(c){
+  const e=document.getElementById("email").value;
+  if(!e) return alert("Email requis");
+  location.href=`pay.html?crypto=${c}&email=${encodeURIComponent(e)}`;
+}
+</script>
 
 </body>
 </html>
