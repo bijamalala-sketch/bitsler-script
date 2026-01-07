@@ -1,5 +1,5 @@
 const PRICE_USD = 10;
-const WORKER_URL = "https://TON-WORKER.workers.dev/check";
+const WORKER_URL = "https://crypto-pay-worker.bijamalala.workers.dev/check";
 
 const wallets = {
   BTC:{addr:"bc1XXXX",net:"Bitcoin",pair:"BTC-USD"},
