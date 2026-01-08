@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Paiement crypto</title>
+<title>Crypto Payment</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
 <style>
 body {font-family:'Inter',sans-serif;background:linear-gradient(135deg,#e0e7ff,#f5f5f5);margin:0;display:flex;justify-content:center;align-items:center;min-height:100vh;}
@@ -23,18 +23,18 @@ button.copy-btn:hover{background:#1e40af;}
 
 <div class="container">
     <h1 id="cryptoName"></h1>
-    <p>Commande : <b id="orderId"></b></p>
-    <p>Email : <b id="email"></b></p>
+    <p>Order ID: <b id="orderId"></b></p>
+    <p>Email: <b id="email"></b></p>
 
-    <p class="amount" id="amount">Calcul du montant...</p>
+    <p class="amount" id="amount">Calculating amount...</p>
 
     <div class="wallet-box" id="address"></div>
-    <button class="copy-btn" onclick="copyAddress()">📋 Copier l'adresse</button>
+    <button class="copy-btn" onclick="copyAddress()">📋 Copy Address</button>
 
     <img id="qr" src="" alt="QR Code">
 
     <p class="network" id="network"></p>
-    <p class="timer">⏳ Temps restant : <span id="timer">15:00</span></p>
+    <p class="timer">⏳ Time remaining: <span id="timer">15:00</span></p>
 </div>
 
 <script>
@@ -48,11 +48,11 @@ document.getElementById("cryptoName").innerText=crypto;
 document.getElementById("orderId").innerText=orderId;
 document.getElementById("email").innerText=email;
 document.getElementById("address").innerText=wallets[crypto].addr;
-document.getElementById("network").innerText="Réseau : "+wallets[crypto].net;
+document.getElementById("network").innerText="Network: "+wallets[crypto].net;
 let t=900; setInterval(()=>{let m=Math.floor(t/60),s=t%60; document.getElementById("timer").innerText=`${m}:${s<10?"0":""}${s}`; if(--t<0) location.href="expired.html";},1000);
-function copyAddress(){navigator.clipboard.writeText(wallets[crypto].addr);alert("Adresse copiée !");}
+function copyAddress(){navigator.clipboard.writeText(wallets[crypto].addr);alert("Address copied!");}
 async function loadAmount(){let amt;if(wallets[crypto].fixed){amt=PRICE_USD.toFixed(2);}else{const r=await fetch(`https://api.coinbase.com/v2/prices/${wallets[crypto].pair}/spot`);const d=await r.json();amt=(PRICE_USD/d.data.amount).toFixed(8);}
-document.getElementById("amount").innerText=`Envoyer ${amt} ${crypto}`;
+document.getElementById("amount").innerText=`Send ${amt} ${crypto}`;
 document.getElementById("qr").src=`https://api.qrserver.com/v1/create-qr-code/?data=${wallets[crypto].addr}&size=200x200`;}
 loadAmount();
 </script>
