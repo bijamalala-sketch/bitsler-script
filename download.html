@@ -2,7 +2,7 @@
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
-<title>Téléchargement</title>
+<title>Download</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
 <style>
 body {
@@ -58,9 +58,9 @@ a#file:hover {
 <body>
 
 <div class="container">
-    <h1>Téléchargement</h1>
-    <p id="message">Préparation de votre fichier…</p>
-    <a id="file" href="#" style="display:none;">Télécharger maintenant</a>
+    <h1>Download</h1>
+    <p id="message">Your file is ready!…</p>
+    <a id="file" href="#" style="display:none;">Download now.</a>
 </div>
 
 <script>
@@ -69,16 +69,16 @@ const token = params.get("token");
 const data = JSON.parse(localStorage.getItem("dl_"+token) || "{}");
 
 if(!data){
-    document.getElementById("message").innerText = "Lien invalide ou expiré.";
+    document.getElementById("message").innerText = "Invalid or expired link.";
 }else if(data.used || Date.now() > data.exp){
-    document.getElementById("message").innerText = "Ce lien a expiré ou a déjà été utilisé.";
+    document.getElementById("message").innerText = "This link has expired or has already been used.";
 }else if(data.fp !== navigator.userAgent){
-    document.getElementById("message").innerText = "Ce lien ne peut pas être utilisé sur cet appareil.";
+    document.getElementById("message").innerText = "This link can only be used on this device.";
 }else{
     // Tout est ok
     document.getElementById("file").style.display="inline-block";
     document.getElementById("file").href="fichier.txt";
-    document.getElementById("message").innerText="Votre fichier est prêt à être téléchargé !";
+    document.getElementById("message").innerText="Your file is ready to download !";
     data.used = true;
     localStorage.setItem("dl_"+token, JSON.stringify(data));
 }
