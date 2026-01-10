@@ -1,5 +1,5 @@
 const WORKER_URL = "https://crypto-backend.bijamalala.workers.dev";
-const PRICE_USD = 10;
+const PRICE_USD = 30;
 
 const wallets = {
   BTC: "1B4GpRC6A2tWiVAqqb9cCEJNyGHmZK6Uf4",
