@@ -1,61 +1,55 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<title>Crypto Payment</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
-<style>
-body {font-family:'Inter',sans-serif;background:linear-gradient(135deg,#e0e7ff,#f5f5f5);margin:0;display:flex;justify-content:center;align-items:center;min-height:100vh;}
-.container {background:#fff;padding:35px 40px;border-radius:15px;box-shadow:0 12px 25px rgba(0,0,0,.2);max-width:450px;width:100%;text-align:center;position:relative;}
-h1{color:#2563eb;font-weight:700;margin-bottom:15px;}
-p{margin:8px 0;color:#555;}
-p.amount{font-size:24px;font-weight:700;color:#16a34a;margin:15px 0;}
-.wallet-box{background:#f3f4f6;border:1px dashed #2563eb;padding:12px 15px;border-radius:10px;word-break:break-all;margin-bottom:10px;position:relative;font-weight:500;}
-button.copy-btn{padding:10px 15px;background:#2563eb;color:#fff;border:none;border-radius:10px;cursor:pointer;font-weight:500;margin-bottom:20px;transition:.2s all;}
-button.copy-btn:hover{background:#1e40af;}
-#qr{margin:15px 0;width:200px;height:200px;}
-.timer{font-size:18px;color:#dc2626;font-weight:600;margin-bottom:15px;}
-.network{color:#2563eb;font-weight:500;margin-bottom:20px;}
-@media(max-width:480px){.container{padding:25px 20px;}#qr{width:150px;height:150px;}}
-</style>
-</head>
-<body>
+<!DOCTYPE html><html><head>
+<meta charset="utf-8"><title>Crypto Payment</title>
+<link rel="stylesheet" href="style.css">
+</head><body>
+<div class="container center">
+<h1 id="c"></h1>
+<p>Order ID: <b id="oid"></b></p>
+<p>Email: <b id="em"></b></p>
 
-<div class="container">
-    <h1 id="cryptoName"></h1>
-    <p>Order ID: <b id="orderId"></b></p>
-    <p>Email: <b id="email"></b></p>
+<div id="amt" class="price"></div>
 
-    <p class="amount" id="amount">Calculating amount...</p>
+<div class="box" id="addr"></div>
+<button class="btn" onclick="copy()">Copy address</button>
 
-    <div class="wallet-box" id="address"></div>
-    <button class="copy-btn" onclick="copyAddress()">📋 Copy Address</button>
-
-    <img id="qr" src="" alt="QR Code">
-
-    <p class="network" id="network"></p>
-    <p class="timer">⏳ Time remaining: <span id="timer">15:00</span></p>
+<img id="qr" width="180">
+<p id="net"></p>
+<p class="timer red">Time left: <span id="t"></span></p>
 </div>
 
+<script src="script.js"></script>
 <script>
-const PRICE_USD=30;
-const wallets={BTC:{addr:"1B4GpRC6A2tWiVAqqb9cCEJNyGHmZK6Uf4",pair:"BTC-USD",net:"Bitcoin"},ETH:{addr:"0xb0896309e10d52c6925179a7426f3d642db096db",pair:"ETH-USD",net:"Ethereum"},LTC:{addr:"LNZBEueQ14NRHoD1RYMiJpFUxFmnfXUDZN",pair:"LTC-USD",net:"Litecoin"},DOGE:{addr:"D6oCyXEUXwh2yHHp43WZWqjGMJNgP5dC6A",pair:"DOGE-USD",net:"Dogecoin"},USDT_TRON:{addr:"TJbd8B6dGaYYuhwRXAMppxDnYKanXHWirQ",fixed:true,net:"TRC20"},USDT_BEP20:{addr:"0xb0896309e10d52c6925179a7426f3d642db096db",fixed:true,net:"BEP20"}};
-const p=new URLSearchParams(location.search);
-const crypto=p.get("crypto"); const email=p.get("email");
-if(!wallets[crypto]||!email) location.href="index.html";
-const orderId="ORD-"+Date.now();
-document.getElementById("cryptoName").innerText=crypto;
-document.getElementById("orderId").innerText=orderId;
-document.getElementById("email").innerText=email;
-document.getElementById("address").innerText=wallets[crypto].addr;
-document.getElementById("network").innerText="Network: "+wallets[crypto].net;
-let t=900; setInterval(()=>{let m=Math.floor(t/60),s=t%60; document.getElementById("timer").innerText=`${m}:${s<10?"0":""}${s}`; if(--t<0) location.href="expired.html";},1000);
-function copyAddress(){navigator.clipboard.writeText(wallets[crypto].addr);alert("Address copied!");}
-async function loadAmount(){let amt;if(wallets[crypto].fixed){amt=PRICE_USD.toFixed(2);}else{const r=await fetch(`https://api.coinbase.com/v2/prices/${wallets[crypto].pair}/spot`);const d=await r.json();amt=(PRICE_USD/d.data.amount).toFixed(8);}
-document.getElementById("amount").innerText=`Send ${amt} ${crypto}`;
-document.getElementById("qr").src=`https://api.qrserver.com/v1/create-qr-code/?data=${wallets[crypto].addr}&size=200x200`;}
-loadAmount();
-</script>
+(async()=>{
+  const p=new URLSearchParams(location.search);
+  const c=p.get("c"), e=p.get("e");
+  if(!wallets[c]||!e) return location.href="index.html";
+  const oid=uid();
+  const ip=await getIP();
+  const start=Date.now();
 
-</body>
-</html>
+  localStorage.setItem("order_"+oid,JSON.stringify({
+    oid,email:e,crypto:c,start,ip:ip.ip,country:ip.country_name,status:"pending"
+  }));
+
+  cEl.textContent=c; oidEl.textContent=oid; emEl.textContent=e;
+  addr.textContent=wallets[c].addr;
+  net.textContent="Network: "+wallets[c].net;
+
+  const a=await getAmount(c);
+  amt.textContent=`Send ${a} ${c}`;
+  qr.src=`https://api.qrserver.com/v1/create-qr-code/?data=${wallets[c].addr}`;
+
+  let s=EXPIRATION_MIN*60;
+  setInterval(()=>{
+    t.textContent=`${Math.floor(s/60)}:${String(s%60).padStart(2,'0')}`;
+    if(--s<0){
+      const o=JSON.parse(localStorage.getItem("order_"+oid));
+      o.status="expired"; localStorage.setItem("order_"+oid,JSON.stringify(o));
+      location.href="expired.html";
+    }
+  },1000);
+
+  window.copy=()=>{navigator.clipboard.writeText(wallets[c].addr);alert("Copied")}
+})();
+</script>
+</body></html>
