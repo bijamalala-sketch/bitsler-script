@@ -1,7 +1,86 @@
-body{font-family:'Inter',sans-serif;background:#f9fafb;color:#111;margin:0;padding:0;}
-.container{max-width:500px;margin:auto;padding:20px;}
-h1{font-weight:800;}
-.price{font-size:22px;font-weight:600;margin:10px 0;}
-input[type=email]{width:100%;padding:10px;margin:10px 0;border-radius:8px;border:1px solid #ccc;}
-.btn{display:inline-block;padding:10px 20px;background:#2563eb;color:#fff;border:none;border-radius:8px;text-decoration:none;cursor:pointer;}
-.btn:hover{background:#1d4ed8;}
+body {
+  background: #0e0e12;
+  font-family: Arial, sans-serif;
+  color: #fff;
+  margin: 0;
+  padding: 0;
+}
+
+.box {
+  max-width: 420px;
+  margin: 40px auto;
+  background: #16161d;
+  padding: 30px;
+  border-radius: 14px;
+  text-align: center;
+}
+
+h1, h2 {
+  margin-bottom: 10px;
+}
+
+.desc {
+  color: #aaa;
+  margin-bottom: 20px;
+}
+
+.price {
+  font-size: 26px;
+  font-weight: bold;
+  margin-bottom: 20px;
+  color: #00ffae;
+}
+
+label {
+  display: block;
+  margin-bottom: 6px;
+  text-align: center;
+}
+
+input {
+  width: 100%;
+  padding: 12px;
+  border-radius: 8px;
+  border: none;
+  margin-bottom: 20px;
+}
+
+.choose {
+  margin: 20px 0 10px;
+  font-weight: bold;
+}
+
+button {
+  width: 100%;
+  padding: 14px;
+  margin: 8px 0;
+  border-radius: 10px;
+  border: none;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+button:hover {
+  opacity: 0.9;
+}
+
+.socials {
+  margin-top: 20px;
+}
+
+.socials a {
+  color: #00c3ff;
+  margin: 0 10px;
+  text-decoration: none;
+}
+
+#qr {
+  margin: 20px auto;
+  display: block;
+}
+
+.timer {
+  margin-top: 15px;
+  color: #ff6464;
+  font-weight: bold;
+}
