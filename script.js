@@ -1,4 +1,4 @@
-const WORKER_URL = "https://TON-WORKER.workers.dev";
+const WORKER_URL = "https://crypto-backend.bijamalala.workers.dev/";
 const PRICE_USD = 10;
 
 const wallets = {
