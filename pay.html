@@ -2,9 +2,12 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Crypto Payment</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Crypto Payment</title>
 <link rel="stylesheet" href="style.css">
+
+<!-- QRCode.js pour générer le QR côté client -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 </head>
 
 <body>
@@ -23,7 +26,7 @@
   <button class="btn" onclick="copyAddress()">Copy address</button>
 
   <p><strong>Scan QR code:</strong></p>
-  <img id="qrCode" width="180" height="180" alt="QR Code">
+  <div id="qrCode" style="width:180px;height:180px;margin:auto;"></div>
 
   <p id="networkInfo"></p>
 
@@ -34,7 +37,7 @@
 </div>
 
 <script>
-/* ===================== CONFIG ===================== */
+// ===================== CONFIG =====================
 const PRICE_USD = 10;
 const EXPIRATION_MINUTES = 15;
 
@@ -47,73 +50,80 @@ const wallets = {
   USDT_BEP20:{ address: "0xb0896309e10d52c6925179a7426f3d642db096db", network: "BEP20", fixed: true }
 };
 
-/* ===================== UTILS ===================== */
-function generateOrderId() {
-  return "ORD-" + Date.now() + "-" + Math.random().toString(36).substring(2, 7);
+// ===================== UTILS =====================
+function generateOrderId(){
+  return "ORD-"+Date.now()+"-"+Math.random().toString(36).substring(2,7);
 }
 
-async function getCryptoAmount(crypto) {
-  if (wallets[crypto].fixed) return PRICE_USD.toFixed(2);
-  const r = await fetch(`https://api.coinbase.com/v2/prices/${wallets[crypto].pair}/spot`);
-  const d = await r.json();
-  return (PRICE_USD / d.data.amount).toFixed(8);
+async function getCryptoAmount(crypto){
+  if(wallets[crypto].fixed) return PRICE_USD.toFixed(2);
+  try{
+    const r = await fetch(`https://api.coinbase.com/v2/prices/${wallets[crypto].pair}/spot`);
+    const d = await r.json();
+    return (PRICE_USD / d.data.amount).toFixed(8);
+  }catch{
+    return PRICE_USD; // fallback si API ne répond pas
+  }
 }
 
-/* ===================== PAGE LOAD ===================== */
-(async function () {
-
+// ===================== MAIN =====================
+(async function(){
   const params = new URLSearchParams(window.location.search);
   const crypto = params.get("c");
   const email = params.get("e");
 
-  if (!crypto || !wallets[crypto] || !email) {
-    window.location.href = "index.html";
+  if(!crypto || !wallets[crypto] || !email){
+    window.location.href="index.html";
     return;
   }
 
   const orderId = generateOrderId();
 
-  document.getElementById("cryptoName").textContent = crypto + " Payment";
-  document.getElementById("orderId").textContent = orderId;
-  document.getElementById("emailClient").textContent = email;
-
-  document.getElementById("walletAddress").textContent = wallets[crypto].address;
-  document.getElementById("networkInfo").textContent =
-    "Network: " + wallets[crypto].network;
-
-  const amount = await getCryptoAmount(crypto);
-  document.getElementById("amountCrypto").textContent =
-    `Send exactly ${amount} ${crypto}`;
-
-  /* QR CODE — 100% GitHub Pages compatible */
-  const qrData = wallets[crypto].address;
-  document.getElementById("qrCode").src =
-    "https://api.qr-code-generator.com/v1/create?size=180x180&data=" +
-    encodeURIComponent(qrData);
-
-  /* TIMER */
-  let seconds = EXPIRATION_MINUTES * 60;
+  // Elements DOM
+  const cEl = document.getElementById("cryptoName");
+  const oidEl = document.getElementById("orderId");
+  const emailEl = document.getElementById("emailClient");
+  const addrEl = document.getElementById("walletAddress");
+  const netEl = document.getElementById("networkInfo");
+  const amtEl = document.getElementById("amountCrypto");
   const timerEl = document.getElementById("timer");
+  const qrEl = document.getElementById("qrCode");
 
-  const interval = setInterval(() => {
-    const m = Math.floor(seconds / 60);
-    const s = seconds % 60;
-    timerEl.textContent = `${m}:${s.toString().padStart(2, "0")}`;
+  // Affichage infos
+  cEl.textContent = crypto + " Payment";
+  oidEl.textContent = orderId;
+  emailEl.textContent = email;
+  addrEl.textContent = wallets[crypto].address;
+  netEl.textContent = "Network: " + wallets[crypto].network;
+
+  // Montant en crypto
+  const amount = await getCryptoAmount(crypto);
+  amtEl.textContent = `Send exactly ${amount} ${crypto}`;
+
+  // QR CODE
+  qrEl.innerHTML = "";
+  new QRCode(qrEl, { text: wallets[crypto].address, width:180, height:180 });
+
+  // TIMER
+  let seconds = EXPIRATION_MINUTES * 60;
+  const interval = setInterval(()=>{
+    const m = Math.floor(seconds/60);
+    const s = seconds%60;
+    timerEl.textContent = `${m}:${s.toString().padStart(2,"0")}`;
     seconds--;
-
-    if (seconds < 0) {
+    if(seconds < 0){
       clearInterval(interval);
-      window.location.href = "expired.html";
+      window.location.href="expired.html";
     }
-  }, 1000);
+  },1000);
 
 })();
 
-/* ===================== COPY ===================== */
-function copyAddress() {
-  const text = document.getElementById("walletAddress").textContent;
-  navigator.clipboard.writeText(text);
-  alert("Wallet address copied");
+// ===================== COPY ADDRESS =====================
+function copyAddress(){
+  const addr = document.getElementById("walletAddress").textContent;
+  navigator.clipboard.writeText(addr);
+  alert("Wallet address copied!");
 }
 </script>
 
