@@ -13,8 +13,8 @@
   display: flex;
   align-items: center;
   gap: 12px;
-  padding: 14px;
-  margin-bottom: 12px;
+  padding: 14px 20px;
+  margin: 10px auto; /* centré horizontalement */
   border-radius: 12px;
   border: none;
   cursor: pointer;
@@ -22,6 +22,7 @@
   font-size: 16px;
   transition: transform 0.2s, box-shadow 0.2s;
   justify-content: flex-start;
+  max-width: 300px; /* limite la largeur pour centrage propre */
 }
 .crypto-btn img { width: 28px; height: 28px; }
 .crypto-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 12px rgba(0,0,0,0.15); }
@@ -33,6 +34,9 @@
 .crypto-DOGE { background: #c2a633; color: #0f172a; }
 .crypto-USDT_TRON { background: #26a17b; color: #fff; }
 .crypto-USDT_BEP20 { background: #26a17b; color: #fff; }
+
+/* Container pour centrer le contenu */
+.container { text-align: center; }
 </style>
 
 </head>
@@ -48,7 +52,7 @@
 
   <div class="price">$10 USD</div>
 
-  <ul style="text-align:left;color:#475569;font-size:14px;">
+  <ul style="text-align:center;color:#475569;font-size:14px;">
     <li>✔ Instant delivery after payment</li>
     <li>✔ Secure crypto payment</li>
     <li>✔ Unique download link</li>
