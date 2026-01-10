@@ -1,5 +1,39 @@
-const WORKER_URL = "https://crypto-backend.bijamalala.workers.dev"; // ← CHANGE
+const WORKER_URL = "https://crypto-backend.bijamalala.workers.dev"; // 🔴 À REMPLACER
 
+// Conversion code pays → nom complet
+const COUNTRY_NAMES = {
+  FR: "France",
+  US: "United States",
+  CA: "Canada",
+  GB: "United Kingdom",
+  DE: "Germany",
+  ES: "Spain",
+  IT: "Italy",
+  BE: "Belgium",
+  CH: "Switzerland",
+  MA: "Morocco",
+  DZ: "Algeria",
+  TN: "Tunisia",
+  SN: "Senegal",
+  CI: "Ivory Coast",
+  CM: "Cameroon",
+  NG: "Nigeria",
+  BR: "Brazil",
+  IN: "India",
+  CN: "China",
+  RU: "Russia",
+  JP: "Japan"
+  // ➜ autres ajoutables si besoin
+};
+
+function getCountryName(code) {
+  if (!code) return "-";
+  return COUNTRY_NAMES[code] || code;
+}
+
+// ============================
+// LOGIN
+// ============================
 async function login() {
   const pin = document.getElementById("pin").value;
 
@@ -23,14 +57,15 @@ async function login() {
   loadOrders();
 }
 
+// ============================
+// LOAD ORDERS
+// ============================
 async function loadOrders() {
   const token = localStorage.getItem("adminToken");
   if (!token) return;
 
   const res = await fetch(WORKER_URL + "/admin/orders", {
-    headers: {
-      "Authorization": "Bearer " + token
-    }
+    headers: { "Authorization": "Bearer " + token }
   });
 
   if (!res.ok) {
@@ -46,18 +81,25 @@ async function loadOrders() {
 
   orders.forEach(o => {
     const tr = document.createElement("tr");
+
+    const statusClass =
+      o.status === "paid" ? "status-paid" :
+      o.status === "pending" ? "status-pending" :
+      "status-expired";
+
     tr.innerHTML = `
       <td>${o.orderId}</td>
       <td>${o.email}</td>
       <td>${o.crypto}</td>
       <td>${o.amountUSD}</td>
-      <td>${o.status}</td>
+      <td class="${statusClass}">${o.status}</td>
       <td>${o.txid || "-"}</td>
       <td>${o.ip || "-"}</td>
-      <td>${o.country || "-"}</td>
+      <td>${getCountryName(o.country)}</td>
       <td>${new Date(o.createdAt).toLocaleString()}</td>
       <td>${o.paidAt ? new Date(o.paidAt).toLocaleString() : "-"}</td>
     `;
+
     tbody.appendChild(tr);
   });
 }
