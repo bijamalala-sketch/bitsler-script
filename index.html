@@ -1,54 +1,32 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<title>Buy Bitsler Script</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
-<style>
-body {font-family:'Inter',sans-serif;background:linear-gradient(120deg,#f5f5f5,#e0e7ff);display:flex;justify-content:center;align-items:center;min-height:100vh;margin:0;}
-.container {background:#fff;padding:35px 40px;border-radius:15px;box-shadow:0 12px 25px rgba(0,0,0,0.2);max-width:420px;width:100%;text-align:center;position:relative;}
-h1 {font-weight:700;margin-bottom:10px;color:#2563eb;}
-p.description {font-size:15px;margin-bottom:15px;color:#555;}
-p.price {font-size:26px;font-weight:700;margin-bottom:25px;color:#16a34a;}
-.badge {position:absolute;top:-10px;right:-10px;background:#f59e0b;color:#fff;padding:5px 10px;font-size:12px;border-radius:8px;font-weight:600;}
-label {display:block;font-weight:500;margin-bottom:5px;text-align:left;}
-input[type="email"] {width:100%;padding:12px 15px;margin-bottom:25px;border:1px solid #ccc;border-radius:10px;font-size:14px;outline:none;transition:.2s all;}
-input[type="email"]:focus {border-color:#2563eb;box-shadow:0 0 5px rgba(37,99,235,.4);}
-.crypto-btn {display:flex;align-items:center;justify-content:flex-start;gap:12px;width:100%;padding:14px 20px;margin-bottom:15px;border:none;border-radius:12px;background:#2563eb;color:#fff;font-size:16px;cursor:pointer;transition:.3s all;}
-.crypto-btn img {width:24px;height:24px;}
-.crypto-btn:hover {background:#1e40af;transform:translateY(-2px);}
-footer {margin-top:20px;font-size:12px;color:#888;}
-@media(max-width:480px){.container{padding:25px 20px;}.crypto-btn{font-size:15px;padding:12px;}}
-</style>
-</head>
-<body>
+<!DOCTYPE html><html><head>
+<meta charset="utf-8"><title>Buy Digital Product</title>
+<link rel="stylesheet" href="style.css">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;800&display=swap" rel="stylesheet">
+</head><body>
+<div class="container center">
+<h1>Digital Product</h1>
+<p>Exclusive TXT file. Instant download after payment.</p>
+<div class="price">$10 USD</div>
 
-<div class="container">
-    <div class="badge">🔥 Special Offer!</div>
-    <h1>💻 Buy This Bitsler Script 0.4 BTC</h1>
-    <p class="description">Instantly Earn 0.4 BTC with This Magic Script on Bitsler! Instant download after payment!</p>
-    <p class="price">Price: $30 USD</p>
+<label>Email (required)</label>
+<input id="email" type="email" placeholder="you@email.com" required>
 
-    <label for="email">Your email <span style="color:red;">*</span></label>
-    <input type="email" id="email" placeholder="you@example.com" required>
+<button class="btn crypto" onclick="go('BTC')"><img src="https://cryptologos.cc/logos/bitcoin-btc-logo.png?v=023">Bitcoin</button>
+<button class="btn crypto" onclick="go('ETH')"><img src="https://cryptologos.cc/logos/ethereum-eth-logo.png?v=023">Ethereum</button>
+<button class="btn crypto" onclick="go('LTC')"><img src="https://cryptologos.cc/logos/litecoin-ltc-logo.png?v=023">Litecoin</button>
+<button class="btn crypto" onclick="go('DOGE')"><img src="https://cryptologos.cc/logos/dogecoin-doge-logo.png?v=023">Dogecoin</button>
+<button class="btn crypto" onclick="go('USDT_TRON')"><img src="https://cryptologos.cc/logos/tether-usdt-logo.png?v=023">USDT TRC20</button>
+<button class="btn crypto" onclick="go('USDT_BEP20')"><img src="https://cryptologos.cc/logos/tether-usdt-logo.png?v=023">USDT BEP20</button>
 
-    <button class="crypto-btn" onclick="goPay('BTC')"><img src="https://cryptologos.cc/logos/bitcoin-btc-logo.png?v=023" alt="BTC"> Bitcoin (BTC)</button>
-    <button class="crypto-btn" onclick="goPay('ETH')"><img src="https://cryptologos.cc/logos/ethereum-eth-logo.png?v=023" alt="ETH"> Ethereum (ETH)</button>
-    <button class="crypto-btn" onclick="goPay('LTC')"><img src="https://cryptologos.cc/logos/litecoin-ltc-logo.png?v=023" alt="LTC"> Litecoin (LTC)</button>
-    <button class="crypto-btn" onclick="goPay('DOGE')"><img src="https://cryptologos.cc/logos/dogecoin-doge-logo.png?v=023" alt="DOGE"> Dogecoin (DOGE)</button>
-    <button class="crypto-btn" onclick="goPay('USDT_TRON')"><img src="https://cryptologos.cc/logos/tether-usdt-logo.png?v=023" alt="USDT"> USDT TRC20</button>
-    <button class="crypto-btn" onclick="goPay('USDT_BEP20')"><img src="https://cryptologos.cc/logos/tether-usdt-logo.png?v=023" alt="USDT"> USDT BEP20</button>
-
-    <footer>Payments are secure and sent directly to our wallets.</footer>
+<p class="small">Secure crypto payments · Direct to wallet</p>
 </div>
 
+<script src="script.js"></script>
 <script>
-function goPay(crypto){
-    const e = document.getElementById("email").value;
-    if(!e){alert("Please enter your email to continue.");return;}
-    location.href=`pay.html?crypto=${crypto}&email=${encodeURIComponent(e)}`;
+function go(c){
+  const e=email.value.trim();
+  if(!e) return alert("Email required");
+  location.href=`pay.html?c=${c}&e=${encodeURIComponent(e)}`;
 }
 </script>
-
-</body>
-</html>
+</body></html>
