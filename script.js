@@ -75,7 +75,7 @@ function copyAddress(){
   // Vérification TXID via Cloudflare Worker
   setInterval(async ()=>{
     try{
-      const res = await fetch(`https://YOUR-WORKER.workers.dev?crypto=${crypto}&address=${wallets[crypto].address}&amount=${PRICE_USD}`);
+      const res = await fetch(`https://crypto-pay-worker.bijamalala.workers.dev?crypto=${crypto}&address=${wallets[crypto].address}&amount=${PRICE_USD}`);
       const data = await res.json();
       if(data.paid){
         localStorage.setItem("txid_"+orderId, data.txid);
