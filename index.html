@@ -5,39 +5,36 @@
 <title>Buy Digital Product</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link rel="stylesheet" href="style.css">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+
 <style>
-body { font-family: 'Inter',sans-serif; background: #f9fafb; color: #111; margin:0; padding:0; }
-.container { max-width: 500px; margin: 40px auto; padding: 20px; text-align: center; background: #fff; border-radius: 12px; box-shadow: 0 8px 24px rgba(0,0,0,0.05); }
-h1 { font-weight: 800; margin-bottom: 10px; }
-.price { font-size: 24px; font-weight: 700; color: #2563eb; margin: 10px 0; }
-input[type=email] { width: 100%; padding: 12px; margin: 12px 0; border-radius: 8px; border:1px solid #ccc; font-size: 16px; }
+/* Boutons crypto avec logos */
 .crypto-btn {
   display: flex;
   align-items: center;
-  justify-content: center;
   gap: 12px;
   padding: 14px 20px;
-  margin: 10px auto;
+  margin: 10px auto; /* centré horizontalement */
   border-radius: 12px;
   border: none;
   cursor: pointer;
   font-weight: 600;
   font-size: 16px;
-  max-width: 300px;
   transition: transform 0.2s, box-shadow 0.2s;
+  justify-content: flex-start;
+  max-width: 300px; /* limite la largeur pour centrage propre */
 }
-.crypto-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 12px rgba(0,0,0,0.15);}
 .crypto-btn img { width: 28px; height: 28px; }
-.crypto-BTC { background:#f7931a;color:#fff; }
-.crypto-ETH { background:#3c3c3d;color:#fff; }
-.crypto-LTC { background:#bebebe;color:#0f172a; }
-.crypto-DOGE { background:#c2a633;color:#0f172a; }
-.crypto-USDT_TRON, .crypto-USDT_BEP20 { background:#26a17b;color:#fff; }
-ul { text-align: left; display: inline-block; padding-left: 20px; color:#475569; font-size:14px; margin-bottom:20px;}
-ul li { margin-bottom:6px; }
-</style>
-</head>
-<body>
+.crypto-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 12px rgba(0,0,0,0.15); }
+
+/* Couleurs par crypto */
+.crypto-BTC { background: #f7931a; color: #fff; }
+.crypto-ETH { background: #3c3c3d; color: #fff; }
+.crypto-LTC { background: #bebebe; color: #0f172a; }
+.crypto-DOGE { background: #c2a633; color: #0f172a; }
+.crypto-USDT_TRON { background: #26a17b; color: #fff; }
+.crypto-USDT_BEP20 { background: #26a17b; color: #fff; }
+
 /* Container pour centrer le contenu */
 .container { text-align: center; }
 </style>
@@ -49,7 +46,7 @@ ul li { margin-bottom:6px; }
   <h1>Bitsler Script 0.4 BTC</h1>
 
   <p>
-    Purchase this script for Bitsler if you want to instantly earn 0.4 BTC. Follow all steps in the Youtube video or contact us for more informations.
+    Purchase this script for Bitsler if you want to instantly earn 0.4 BTC.
   </p>
 
   <div class="price">$30 USD</div>
