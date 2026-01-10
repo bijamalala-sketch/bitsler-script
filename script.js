@@ -25,12 +25,20 @@ async function createOrder(order){
       headers: {"Content-Type":"application/json"},
       body: JSON.stringify(order)
     });
+
+    if (!resp.ok){
+      const text = await resp.text();
+      alert("Backend error: " + text);
+      return null;
+    }
+
     return await resp.json();
   } catch(e){
-    alert("Failed to create order. Backend issue.");
+    alert("Failed to create order: " + e);
     return null;
   }
 }
+
 
 (function(){
   const crypto = getParam("crypto");
