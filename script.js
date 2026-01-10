@@ -10,7 +10,7 @@ const wallets = {
   USDT_BEP20:{address:"0xb0896309e10d52c6925179a7426f3d642db096db",network:"BEP20",fixed:true,logo:"https://cryptologos.cc/logos/tether-usdt-logo.png?v=023"}
 };
 
-const PRICE_USD = 10;
+const PRICE_USD = 30;
 const EXPIRATION_MINUTES = 15;
 
 // Générer Order ID unique
