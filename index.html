@@ -2,28 +2,88 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Buy Digital File</title>
+<title>Buy Premium Digital File</title>
 <link rel="stylesheet" href="style.css">
+<style>
+/* Spécifique index.html */
+.crypto-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 12px;
+  border-radius: 10px;
+  border: none;
+  margin: 8px 0;
+  cursor: pointer;
+  font-size: 16px;
+  background: #1a1a28;
+  color: #fff;
+  transition: 0.3s;
+}
+
+.crypto-btn:hover {
+  background: #00ffae;
+  color: #0e0e12;
+}
+
+.crypto-btn img {
+  width: 24px;
+  height: 24px;
+}
+
+.socials a {
+  margin: 0 12px;
+  text-decoration: none;
+  color: #00c3ff;
+  font-weight: bold;
+}
+
+.price {
+  font-size: 28px;
+  font-weight: bold;
+  margin-bottom: 20px;
+  color: #00ffae;
+}
+</style>
 </head>
 <body>
 
 <div class="box">
   <h1>Premium Digital File</h1>
-  <p class="desc">Instant access • Secure crypto payment</p>
+  <p class="desc">Get instant access to your exclusive digital content. Secure payments via cryptocurrency.</p>
 
   <div class="price">$10 USD</div>
 
-  <label>Email address (required)</label>
+  <label for="email">Email address (required)</label>
   <input id="email" type="email" placeholder="your@email.com">
 
   <p class="choose">Choose your cryptocurrency</p>
 
-  <button onclick="startPayment('BTC')">Bitcoin (BTC)</button>
-  <button onclick="startPayment('ETH')">Ethereum (ETH)</button>
-  <button onclick="startPayment('LTC')">Litecoin (LTC)</button>
-  <button onclick="startPayment('DOGE')">Dogecoin (DOGE)</button>
-  <button onclick="startPayment('USDT_TRC20')">USDT (TRC20)</button>
-  <button onclick="startPayment('USDT_BEP20')">USDT (BEP20)</button>
+  <!-- BTC -->
+  <button class="crypto-btn" onclick="startPayment('BTC')">
+    <img src="https://cryptologos.cc/logos/bitcoin-btc-logo.png?v=025" alt="BTC"> Bitcoin (BTC)
+  </button>
+  <!-- ETH -->
+  <button class="crypto-btn" onclick="startPayment('ETH')">
+    <img src="https://cryptologos.cc/logos/ethereum-eth-logo.png?v=025" alt="ETH"> Ethereum (ETH)
+  </button>
+  <!-- LTC -->
+  <button class="crypto-btn" onclick="startPayment('LTC')">
+    <img src="https://cryptologos.cc/logos/litecoin-ltc-logo.png?v=025" alt="LTC"> Litecoin (LTC)
+  </button>
+  <!-- DOGE -->
+  <button class="crypto-btn" onclick="startPayment('DOGE')">
+    <img src="https://cryptologos.cc/logos/dogecoin-doge-logo.png?v=025" alt="DOGE"> Dogecoin (DOGE)
+  </button>
+  <!-- USDT TRC20 -->
+  <button class="crypto-btn" onclick="startPayment('USDT_TRC20')">
+    <img src="https://cryptologos.cc/logos/tether-usdt-logo.png?v=025" alt="USDT"> USDT (TRC20)
+  </button>
+  <!-- USDT BEP20 -->
+  <button class="crypto-btn" onclick="startPayment('USDT_BEP20')">
+    <img src="https://cryptologos.cc/logos/tether-usdt-logo.png?v=025" alt="USDT"> USDT (BEP20)
+  </button>
 
   <div class="socials">
     <a href="https://t.me/YOURTELEGRAM" target="_blank">Telegram</a>
@@ -32,14 +92,45 @@
 </div>
 
 <script>
+const WORKER_URL = "https://crypto-backend.bijamalala.workers.dev"; // Remplace par ton Worker
+
 function startPayment(crypto){
   const email = document.getElementById("email").value.trim();
-  if(!email || !email.includes("@")){
-    alert("Valid email required");
+  if(!email){
+    alert("Email required");
     return;
   }
-  window.location.href =
-    `pay.html?crypto=${crypto}&email=${encodeURIComponent(email)}`;
+  if(!email.includes("@")){
+    alert("Enter a valid email");
+    return;
+  }
+
+  // Génération orderId simple
+  const orderId = "ORD-" + Date.now() + "-" + Math.floor(Math.random()*1000);
+
+  // Création order backend
+  fetch(WORKER_URL + "/create-order", {
+    method: "POST",
+    headers: {"Content-Type":"application/json"},
+    body: JSON.stringify({
+      orderId,
+      email,
+      crypto,
+      network: crypto,
+      amountUSD: 10
+    })
+  })
+  .then(r=>r.json())
+  .then(resp=>{
+    if(resp.ok){
+      window.location.href = `pay.html?crypto=${crypto}&email=${encodeURIComponent(email)}&orderId=${orderId}`;
+    } else {
+      alert("Backend error: " + (resp.error || "Unknown"));
+    }
+  })
+  .catch(e=>{
+    alert("Failed to create order: " + e);
+  });
 }
 </script>
 
