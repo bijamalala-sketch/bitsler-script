@@ -1,49 +1,20 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<title>Download Your File</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
-<style>
-body {font-family:'Inter',sans-serif;background:linear-gradient(135deg,#f5f5f5,#e0e7ff);display:flex;justify-content:center;align-items:center;min-height:100vh;margin:0;}
-.container {background:#fff;padding:35px 40px;border-radius:15px;box-shadow:0 12px 25px rgba(0,0,0,0.2);max-width:450px;width:100%;text-align:center;}
-h1 {font-weight:700;color:#2563eb;margin-bottom:15px;}
-p {color:#555;margin:12px 0;}
-a#file {display:inline-block;padding:15px 25px;margin-top:20px;background:#16a34a;color:#fff;font-weight:600;font-size:16px;text-decoration:none;border-radius:12px;transition:.3s all;}
-a#file:hover {background:#15803d;transform:translateY(-2px);}
-</style>
-</head>
-<body>
-
-<div class="container">
-    <h1>Download</h1>
-    <p id="message">Preparing your file…</p>
-    <a id="file" href="#" style="display:none;">Download Now</a>
+<!DOCTYPE html><html><head>
+<meta charset="utf-8"><title>Download</title>
+<link rel="stylesheet" href="style.css">
+</head><body>
+<div class="container center">
+<h1>Download</h1>
+<p id="m">Checking link…</p>
+<a id="f" class="btn" style="display:none" href="fichier.txt">Download</a>
 </div>
-
 <script>
-// Get token from URL
-const params = new URLSearchParams(location.search);
-const token = params.get("token");
-
-// Retrieve download data
-const data = JSON.parse(localStorage.getItem("dl_"+token) || "{}");
-
-// Anti-sharing & expiration checks
-if(!data){
-    document.getElementById("message").innerText = "Invalid or expired link.";
-} else if(data.used || Date.now() > data.exp){
-    document.getElementById("message").innerText = "This link has expired or has already been used.";
-} else if(data.fp !== navigator.userAgent){
-    document.getElementById("message").innerText = "This link can only be used on this device.";
-} else {
-    document.getElementById("file").style.display="inline-block";
-    document.getElementById("file").href="yourfile.txt"; // replace with your actual .txt file
-    document.getElementById("message").innerText="Your file is ready to download!";
-    data.used = true;
-    localStorage.setItem("dl_"+token, JSON.stringify(data));
-}
+const t=new URLSearchParams(location.search).get("t");
+const k="dl_"+t;
+let d=JSON.parse(localStorage.getItem(k)||"null");
+if(!d){m.textContent="Invalid link";throw""}
+if(d.used||Date.now()>d.exp){m.textContent="Link expired";throw""}
+if(d.fp!==navigator.userAgent){m.textContent="Device mismatch";throw""}
+d.used=true; localStorage.setItem(k,JSON.stringify(d));
+m.textContent="Your file is ready"; f.style.display="block";
 </script>
-
-</body>
-</html>
+</body></html>
