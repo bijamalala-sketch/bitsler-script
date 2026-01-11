@@ -106,10 +106,8 @@ function startPayment(crypto){
   }
 
   // Génération orderId simple
- function generateOrderId(){
-  return crypto.randomUUID();
-}
-  
+const orderId = "ORD-" + Date.now() + "-" + Math.floor(Math.random()*1000);
+
   // Création order backend
   fetch(WORKER_URL + "/create-order", {
     method: "POST",
@@ -119,7 +117,7 @@ function startPayment(crypto){
       email,
       crypto,
       network: crypto,
-      amountUSD: 10
+      amountUSD: 30
     })
   })
   .then(r=>r.json())
